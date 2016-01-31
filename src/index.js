@@ -1,8 +1,8 @@
 import once from 'lodash/once';
 
-export default function createAbilityHandler(ability) {
+export function handleAbility(ability) {
 
-    return function(req, res, next) {
+    return function abilityHandler(req, res, next) {
 
         // make sure we have a body
         if (!req.body) {
@@ -12,10 +12,10 @@ export default function createAbilityHandler(ability) {
 
         // TODO validate body? or should ability handle that..
 
-        ability.handle(req.body).then(
-            request => res.json(request.toJSON()),
-            err => next(err)
-        );
+        ability.handle(req.body, function(err, req) {
+            if (err) return next(err);
+            res.json(req.toJSON());
+        });
     }
 }
 

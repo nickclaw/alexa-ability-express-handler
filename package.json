@@ -27,6 +27,6 @@
     "babel-preset-stage-1": "^6.3.13"
   },
   "peerDependencies": {
-    "alexa-ability": "^0.3.4"
+    "alexa-ability": "^0.5.0"
   }
 }
