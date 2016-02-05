@@ -1,16 +1,30 @@
 {
   "name": "alexa-ability-express-handler",
   "version": "0.3.0",
-  "description": "",
+  "description": "Publish an alexa-ability as an express route",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./scripts/test.sh"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/nickclaw/alexa-ability-express-handler"
   },
-  "keywords": [],
+  "bugs": {
+    "url": "http://github.com/nickclaw/alexa-ability-express-handler/issues"
+  },
+  "keywords": [
+    "amazon",
+    "alexa",
+    "skills",
+    "skill",
+    "kit",
+    "echo",
+    "ability",
+    "express",
+    "middleware",
+    "alexa-ability"
+  ],
   "author": {
     "name": "Nicholas Clawson",
     "email": "nickclaw@gmail.com",
