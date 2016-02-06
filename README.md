@@ -16,7 +16,7 @@ ability.on(events.launch, function(req) {
 
 const app = express();
 app.use(bodyParser.json());
-app.use('/my-intent', handleAbility(ability));
+app.post('/my-intent', handleAbility(ability));
 
 app.listen(8000, function() {
     console.log('listening');

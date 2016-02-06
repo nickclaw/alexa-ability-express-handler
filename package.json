@@ -1,7 +1,7 @@
 {
   "name": "alexa-ability-express-handler",
   "version": "0.3.1",
-  "description": "Publish an alexa-ability as an express route",
+  "description": "Expose an alexa-ability as an express route",
   "main": "lib/index.js",
   "scripts": {
     "test": "./scripts/test.sh"
@@ -48,8 +48,5 @@
     "mocha": "^2.3.4",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0"
-  },
-  "peerDependencies": {
-    "alexa-ability": "^0.6.0"
   }
 }
