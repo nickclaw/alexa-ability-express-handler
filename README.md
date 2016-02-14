@@ -23,3 +23,15 @@ app.listen(8000, function() {
     console.log('listening');
 });
 ```
+
+### API
+
+##### `verifyRequest(options) -> express middleware`
+Creates a middleware function for express that implements the body verification process
+required by Amazon for certification. Takes an optional options object with the
+following values:
+ - `tolerance`: only accept requests with a timestamp within the given tolerance.
+   Value defaults to 2.5 minutes in milliseconds.
+
+##### `handleAbility(ability) -> express handler`
+Creates an express handler for the given ability.
