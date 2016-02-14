@@ -23,38 +23,26 @@ export function verifyRequest() {
             .then(validateCertificate)
             .then(cert => validateBody(cert, sig, body))
             .then(
-                val => next(),
+                () => next(),
                 err => next(err)
             );
     };
 }
 
-verifyRequest()({headers:{},body:{}});
-
-// Valid
-//  https://s3.amazonaws.com/echo.api/echo-api-cert.pem
-//  https://s3.amazonaws.com:443/echo.api/echo-api-cert.pem
-//  https://s3.amazonaws.com/echo.api/../echo.api/echo-api-cert.pem
-// Invalid
-//  http://s3.amazonaws.com/echo.api/echo-api-cert.pem (invalid protocol)
-//  https://notamazon.com/echo.api/echo-api-cert.pem (invalid hostname)
-//  https://s3.amazonaws.com/EcHo.aPi/echo-api-cert.pem (invalid path)
-//  https://s3.amazonaws.com/invalid.path/echo-api-cert.pem (invalid path)
-//  https://s3.amazonaws.com:563/echo.api/echo-api-cert.pem (invalid port)
-function validateUrl(url) {
+export function validateUrl(url) {
     const { protocol, hostname, pathname, port } = parse(url);
     const path = normalize(pathname);
 
     assert.equal(protocol, 'https:');
     assert.equal(hostname, 's3.amazonaws.com');
-    assert.equal(startsWith(path, 's3.amazonaws.com'), '');
+    assert(startsWith(path, '/echo.api/'), `${path} does not start with /echo.api/`);
     assert.equal(port || 443, 443);
 
     return url;
 }
 
 
-function getCertificate(url) {
+export function getCertificate(url) {
     return new Promise((res, rej) => {
         request(url, (err, resp, body) => {
             if (err) return rej(err);
@@ -64,8 +52,8 @@ function getCertificate(url) {
     });
 }
 
-function validateCertificate(cert) {
-    const { altNames, notBefore, notAfter, publicKey } = parseCert(cert);
+export function validateCertificate(cert) {
+    const { altNames, notBefore, notAfter } = parseCert(cert);
     const now = new Date();
 
     assert(includes(altNames, 'echo-api.amazon.com'), 'Invalid alt names.');
@@ -75,14 +63,11 @@ function validateCertificate(cert) {
     return cert;
 }
 
-function validateBody(cert, sig, body) {
-    console.log(cert, sig, body);
+export function validateBody(cert, sig, body) {
     const verifier = crypto.createVerify('SHA1');
     verifier.update(JSON.stringify(body));
 
     if (!verifier.verify(cert, sig, 'base64')) {
-        console.log('invalid');
         throw new Error();
     }
-    console.log('valid');
 }
