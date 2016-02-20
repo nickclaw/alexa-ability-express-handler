@@ -10,7 +10,7 @@ import startsWith from 'lodash/startsWith';
 import includes from 'lodash/includes';
 import get from 'lodash/get';
 
-const log = debug('express-handler:verifyRequest');
+const log = debug('alexa-ability-express-handler:verifyRequest');
 const MAX_TOLERANCE = 60 * 2.5 * 1000; // 2.5 minutes
 const CERT_HEADER = 'SignatureCertChainUrl';
 const SIG_HEADER = 'Signature';

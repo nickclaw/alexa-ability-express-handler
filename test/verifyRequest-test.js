@@ -86,7 +86,7 @@ describe('validateCertificate step', function() {
 
 describe('validateBody step', function() {
     it('should not work with an invalid setup', function() {
-        expect(() => validateBody(cert, sig + 's', body)).to.throw();
+        expect(() => validateBody(cert, 'asdfasfaf', body)).to.throw();
     });
 
     it('should work with a valid setup', function() {
