@@ -19,13 +19,13 @@ export function handleAbility(ability) {
         log('handling %o', req.body);
         ability.handle(req.body, (err, request) => {
             if (err) {
-                log('ability resulted in error: %s', err);
-                return next(err);
+                log('request failed: %s', err);
+                next(err);
+            } else {
+                const response = request.toJSON();
+                log('request succeeded, sending %o', response);
+                res.json(response);
             }
-
-            const response = request.toJSON();
-            log('ability resulted in response $o', response);
-            res.json(response);
         });
     };
 }
