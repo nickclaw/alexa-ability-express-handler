@@ -2,7 +2,7 @@ import assert from 'assert';
 import Promise from 'bluebird';
 import request from 'request';
 import crypto from 'crypto';
-import debug from 'debug';
+import createDebug from 'debug';
 import { parse } from 'url';
 import { normalize } from 'path';
 import { parseCert } from 'x509';
@@ -10,7 +10,7 @@ import startsWith from 'lodash/startsWith';
 import includes from 'lodash/includes';
 import get from 'lodash/get';
 
-const log = debug('alexa-ability-express-handler:verifyRequest');
+const debug = createDebug('alexa-ability-express-handler:verifyRequest');
 const MAX_TOLERANCE = 60 * 2.5 * 1000; // 2.5 minutes
 const CERT_HEADER = 'SignatureCertChainUrl';
 const SIG_HEADER = 'Signature';
@@ -30,10 +30,10 @@ export function verifyRequest({
         const sig = req.get(SIG_HEADER);
         const body = req.body;
         const timestamp = get(body, 'request.timestamp', DEFAULT_TIME);
-        log('cert-url: %s', chainUrl);
-        log('signature: %s', sig);
-        log('timestamp: %s', timestamp);
-        log('checking body: %o', body);
+        debug('cert-url: %s', chainUrl);
+        debug('signature: %s', sig);
+        debug('timestamp: %s', timestamp);
+        debug('checking body: %o', body);
 
         // basic checks
         if (!chainUrl) return next(new Error('No SignatureCertChainUrl header provided.'));
@@ -56,11 +56,11 @@ export function verifyRequest({
             .then(cert => validateBody(cert, sig, body))
             .then(
                 () => {
-                    log('verified request');
+                    debug('verified request');
                     next();
                 },
                 err => {
-                    log('error verifiying request: %s', err);
+                    debug('error verifiying request: %s', err);
                     next(err);
                 }
             );
@@ -89,7 +89,7 @@ export function validateUrl(url) {
     assert(startsWith(path, CERT_PATH), `${path} does not start with ${CERT_PATH}`);
     assert.equal(port || CERT_PORT, CERT_PORT);
 
-    log('valid url: %s', url);
+    debug('valid url: %s', url);
 
     // return the url to make promise chaining easier
     return url;
@@ -104,21 +104,21 @@ export function validateUrl(url) {
  * @return {String} certificate
  */
 export function getCertificate(url) {
-    log('getting certificate');
+    debug('getting certificate');
 
     return new Promise((res, rej) => {
         request(url, (err, resp, body) => {
             if (err) {
-                log('error getting certificate');
+                debug('error getting certificate');
                 return rej(err);
             }
 
             if (resp.statusCode !== 200) {
-                log('invalid status code: %s', resp.statusCode);
+                debug('invalid status code: %s', resp.statusCode);
                 return rej(new Error('Invalid certificate response.'));
             }
 
-            log('got certificate');
+            debug('got certificate');
             res(body);
         });
     });
@@ -131,7 +131,7 @@ export function getCertificate(url) {
  * @return {String} cert
  */
 export function validateCertificate(cert) {
-    log('validating certificate');
+    debug('validating certificate');
 
     const { altNames, notBefore, notAfter } = parseCert(cert);
     const now = new Date();
@@ -140,7 +140,7 @@ export function validateCertificate(cert) {
     assert(now > new Date(notBefore), 'Certificate expired.');
     assert(now < new Date(notAfter), 'Certificate expired.');
 
-    log('valid certificate');
+    debug('valid certificate');
 
     // return cert to make promise chaining easier
     return cert;
@@ -154,7 +154,7 @@ export function validateCertificate(cert) {
  * @param {Object} body
  */
 export function validateBody(cert, sig, body) {
-    log('checking body against signature');
+    debug('checking body against signature');
     const verifier = crypto.createVerify('SHA1');
     verifier.update(JSON.stringify(body));
 
@@ -162,5 +162,5 @@ export function validateBody(cert, sig, body) {
         throw new Error('Could not verify request body.');
     }
 
-    log('signature matches body');
+    debug('signature matches body');
 }
