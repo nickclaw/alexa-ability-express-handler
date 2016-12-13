@@ -23,7 +23,11 @@ describe('verifyRequest', function() {
         it('should require the proper headers to be present', function() {
             const middleware = verifyRequest();
             const next = sinon.spy();
-            const req = { body, headers: {}};
+            const req = { // TODO fix these god awful stubs
+                get(header) { return this.headers[header.toLowerCase()] },
+                headers: {},
+                body
+            };
             middleware(req, null, next);
             expect(next.args[0][0]).to.be.instanceOf(Error);
         });
@@ -31,10 +35,13 @@ describe('verifyRequest', function() {
         it('should require a body to be present', function() {
             const middleware = verifyRequest();
             const next = sinon.spy();
-            const req = { headers: {
-                SignatureCertChainUrl: 'asdasfas',
-                Signature: 'asdfasfdas'
-            }};
+            const req = { // TODO fix these god awful stubs
+                get(header) { return this.headers[header.toLowerCase()] },
+                headers: {
+                    SignatureCertChainUrl: 'asdasfas',
+                    Signature: 'asdfasfdas'
+                }
+            };
             middleware(req, null, next);
             expect(next.args[0][0]).to.be.instanceOf(Error);
         });
@@ -42,7 +49,8 @@ describe('verifyRequest', function() {
         it('should require a valid timestamp', function() {
             const middleware = verifyRequest();
             const next = sinon.spy();
-            const req = {
+            const req = { // TODO fix these god awful stubs
+                get(header) { return this.headers[header.toLowerCase()] },
                 headers: {
                     SignatureCertChainUrl: 'asdasfas',
                     Signature: 'asdfasfdas'

@@ -26,8 +26,8 @@ export function verifyRequest({
 } = {}) {
     return function verifyRequestMiddleware(req, res, next) {
         // get data
-        const chainUrl = req.headers[CERT_HEADER];
-        const sig = req.headers[SIG_HEADER];
+        const chainUrl = req.get(CERT_HEADER);
+        const sig = req.get(SIG_HEADER);
         const body = req.body;
         const timestamp = get(body, 'request.timestamp', DEFAULT_TIME);
         log('cert-url: %s', chainUrl);
