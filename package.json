@@ -1,6 +1,6 @@
 {
   "name": "alexa-ability-express-handler",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "Expose an alexa-ability as an express route",
   "main": "lib/index.js",
   "scripts": {
