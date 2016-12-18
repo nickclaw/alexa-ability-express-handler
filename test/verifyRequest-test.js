@@ -1,9 +1,4 @@
-import {
-    verifyRequest,
-    validateUrl,
-    validateCertificate,
-    validateBody
-} from '../src/verifyRequest';
+import { verifyRequest } from '../src/verifyRequest';
 import fs from 'fs';
 
 const cert = fs.readFileSync(__dirname + '/fixtures/certificate.txt').toString();
@@ -67,6 +62,8 @@ describe('verifyRequest', function() {
 });
 
 describe('validateUrl step', function() {
+    const { validateUrl } = verifyRequest();
+
     [   'https://s3.amazonaws.com/echo.api/echo-api-cert.pem',
         'https://s3.amazonaws.com:443/echo.api/echo-api-cert.pem',
         'https://s3.amazonaws.com/echo.api/../echo.api/echo-api-cert.pem'
@@ -89,10 +86,13 @@ describe('validateUrl step', function() {
 });
 
 describe('validateCertificate step', function() {
+  const { validateCertificate } = verifyRequest();
 
 });
 
 describe('validateBody step', function() {
+    const { validateBody } = verifyRequest();
+
     it('should not work with an invalid setup', function() {
         expect(() => validateBody(cert, 'asdfasfaf', body)).to.throw();
     });

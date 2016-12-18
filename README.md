@@ -32,6 +32,10 @@ required by Amazon for certification. Takes an optional options object with the
 following values:
  - `tolerance`: only accept requests with a timestamp within the given tolerance.
    Value defaults to 2.5 minutes in milliseconds.
+ - `cacheSize`: maximum number of certificates to cache.
+   Value defaults to 0.
+ - `cacheTime`: maximum time in milliseconds to cache certificates.
+   Value defaults to 1 day.
 
 ##### `handleAbility(ability) -> express handler`
 Creates an express handler for the given ability.
